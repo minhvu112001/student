@@ -1,16 +1,17 @@
-package student;
+package mvcstudent;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import mvcstudent.Student;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
 
+@WebServlet("/students")
 public class StudentServlet extends HttpServlet {
     private List<Student> studentList;
     @Override

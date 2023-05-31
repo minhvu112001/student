@@ -1,4 +1,4 @@
-package student;
+package mvcstudent;
 
 public class Student {
 
