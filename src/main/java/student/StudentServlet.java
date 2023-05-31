@@ -13,25 +13,21 @@ import java.util.*;
 
 public class StudentServlet extends HttpServlet {
     private List<Student> studentList;
-
+    @Override
     public void init() throws ServletException {
         super.init();
         studentList = new ArrayList<>();
-        studentList.add(new Student(1, "Nguyen Van Dong", 9.5));
-        studentList.add(new Student(2, "Tran The Trung", 8.75));
-        studentList.add(new Student(3, "Hoang Mau Phong", 8.4));
-        studentList.add(new Student(4, "Hoang Thi My Dieu", 10.9));
-        studentList.add(new Student(5, "Trinh Mau Kim", 7.6));
+        studentList.add(new Student(1, "Dam Huy Anh Quan", "12A1", 10));
+        studentList.add(new Student(2, "Duong Duc Vinh", "12A2", 9.5));
+        studentList.add(new Student(3, "Tuan Ngoc", "12A3", 8.0));
+        studentList.add(new Student(4, "Nguyen Dac Tien", "12A4", 10));
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse
-            response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-
-        if (action == null) {
+        if(action == null) {
             action = "list";
         }
-
         switch (action) {
             case "new":
                 showNewForm(request, response);
@@ -54,28 +50,30 @@ public class StudentServlet extends HttpServlet {
         }
     }
 
-
-
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
+
     private void listStudents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("studentList", studentList);
+        request.setAttribute("studentList", studentList);;
         RequestDispatcher dispatcher = request.getRequestDispatcher("student-list.jsp");
         dispatcher.forward(request, response);
     }
-    private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+
+    private void showNewForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getRequestDispatcher("student-form.jsp");
         dispatcher.forward(request, response);
     }
 
     private void createStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String studentName = request.getParameter("studentName");
-        double score = Double.parseDouble(request.getParameter("score"));
+        String name = request.getParameter("name");
+        String grade = request.getParameter("grade");
+        double scores = Double.parseDouble(request.getParameter("scores"));
         int id = studentList.size() + 1;
-        Student newStudent = new Student(id, studentName, score);
+
+        Student newStudent = new Student(id, name, grade, scores);
         studentList.add(newStudent);
+
         response.sendRedirect("students");
     }
 
@@ -87,29 +85,30 @@ public class StudentServlet extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("student-form.jsp");
         dispatcher.forward(request, response);
     }
-
     private void updateStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String studentName = request.getParameter("studentName");
-        double score = Double.parseDouble(request.getParameter("score"));
+        String name = request.getParameter("name");
+        String grade = request.getParameter("grade");
+        double scores = Double.parseDouble(request.getParameter("scores"));
 
-        Student studentToUpdate = getStudentById(id);
-        studentToUpdate.setStudentName(studentName);
-        studentToUpdate.setScore(score);
-        response.sendRedirect("products");
+        Student student = getStudentById(id);
+        student.setName(name);
+        student.setGrade(grade);
+        student.setScores(scores);
+
+        response.sendRedirect("students");
     }
-    private void deleteStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    private void deleteStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Student studentToDelete = getStudentById(id);
-        if(studentToDelete != null) {
+        Student student = getStudentById(id);
+        studentList.remove(student);
 
-            studentList.remove(studentToDelete);
-        }
-        response.sendRedirect("products");
+        response.sendRedirect("students");
     }
-    private Student getStudentById(int id){
-        for(Student student : studentList){
-            if(student.getId() == id){
+
+    private Student getStudentById(int id) {
+        for (Student student : studentList) {
+            if (student.getId() == id) {
                 return student;
             }
         }

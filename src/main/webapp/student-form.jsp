@@ -6,30 +6,38 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>Student Form</title>
+    <title>Title</title>
     <style>
-        body{
+        body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        h1{
+
+        h1 {
             color: #333;
         }
-        table{
-            width: 100%;
-            border-collapse: collapse;
+
+        form {
+            width: 300px;
+            margin-top: 20px;
         }
-        th, td{
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ccc;
+
+        label {
+            display: block;
+            margin-bottom: 5px;
         }
-        tr:nth-child(even){
-            background-color: #e0e0e0;
+
+        input[type="text"] {
+            width: 100px;
+            padding: 5px;
+            margin-bottom: 10px;
         }
-        .button{
+
+        input[type="submit"],
+        a.button {
             display: inline-block;
             background-color: #4CAF50;
             color: #fff;
@@ -38,56 +46,57 @@
             border-radius: 4px;
             transition: background-color 0.3s;
         }
-        .button:hover{
+
+        input[type="submit"]:hover,
+        a.button:hover {
             background-color: #45a049;
         }
-        .add-button{
-            margin-bottom: 10px;
-        }
-        .image-container{
-            width: 200px;
-            height: 200px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            overflow: hidden;
+
+        a.button {
+            margin-left: 5px;
         }
     </style>
 </head>
 <body>
-<h1>Student Form</h1>
-<c:choose>
-<c:when test="${empty student.id}">
-    <form method="POST" action="students?action=create">
-        <label for="studentName">Student name: </label>
-        <input type="text" id="studentName" name="studentName">
-        <br><br>
-        <label for="score">Score: </label>
-        <input type="text" id="score" name="price">
-        <br><br>
-        <input  type="submit" value="Create">
-        <a class="button" href="students">Cancels</a>
-    </form>
-    </c:when>
-    <c:otherwise>
+<h1>Student form</h1>
 
-        <form method="POST" action="students?action=update">
-            <input type="hidden" name="id" value="${student.id}">
-            <label for="studentName">Product name: </label>
-            <input type="text" id="Name" name="scoreName" value="${student.scoreName}">
+<c:choose>
+    <c:when test="${empty student.id}">
+        <form action="students?action=create" method="POST">
+            <label for="name">Student Name:</label>
+            <input type="text" id="name" name="name">
+            <label for="grade">Grade:</label>
+            <input type="text" id="grade" name="grade">
+            <label for="scores">Scores: </label>
+            <input type="text" id="scores" name="scores">
             <br><br>
-            <label for="score">Price: </label>
-            <input type="text" id="score" name="score" value="${student.score}">
+            <input type="submit" value="Create">
+            <a href="students" class="button">Cancel</a>
+        </form>
+    </c:when>
+
+
+    <c:otherwise>
+        <form action="students?action=update" method="POST">
+            <input type="hidden" name="id" value="${student.id}">
+            <label for="name">Student Name:</label>
+            <input type="text" id="name" name="name" value="${student.name}">
+            <br><br>
+            <label for="grade">Grade:</label>
+            <input type="text" id="grade" name="grade" value="${student.grade}">
+            <br><br>
+            <label for="scores">Scores:</label>
+            <input type="text" id="scores" name="scores" value="${student.scores}">
             <br><br>
             <input type="submit" value="Update">
-            <a class="button" href="students">Cancel</a>
+            <a href="students" class="button">Cancel</a>
+            <br><br>
         </form>
-        <form method="POST" action="students?action=delete">
+        <form action="students?action=delete" method="POST">
             <input type="hidden" name="id" value="${student.id}">
-            <input class="button" type="submit" value="Delete">
+            <input type="submit" value="Delete">
         </form>
-        </c:otherwise>
-        </c:choose>
-
-
+    </c:otherwise>
+</c:choose>
 </body>
 </html>
